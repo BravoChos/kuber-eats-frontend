@@ -1,4 +1,4 @@
-# Nuber Eats Frontend
+# kuber Eats Frontend
 
 language: typescript
 Stack : React, tailwindcss
