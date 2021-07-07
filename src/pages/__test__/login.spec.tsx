@@ -44,7 +44,7 @@ describe("<Login />", () => {
     expect(errorMessage).toHaveTextContent(/email is required/i);
   });
   it("display password required errors", async () => {
-    const { getByPlaceholderText, debug, getByRole } = renderResult;
+    const { getByPlaceholderText, getByRole } = renderResult;
     const email = getByPlaceholderText(/email/i);
     const submitBtn = getByRole("button");
     await waitFor(() => {
