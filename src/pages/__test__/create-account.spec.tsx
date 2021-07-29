@@ -35,7 +35,7 @@ describe("<CreateAccount />", () => {
   });
   it("renders OK", async () => {
     await waitFor(() =>
-      expect(document.title).toBe("Create Account | Nuber Eats")
+      expect(document.title).toBe("Create Account | Kuber Eats")
     );
   });
   it("renders validation errors", async () => {

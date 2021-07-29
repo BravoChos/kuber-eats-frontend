@@ -26,16 +26,18 @@ describe("<Login />", () => {
   });
   it("should render OK", async () => {
     await waitFor(() => {
-      expect(document.title).toBe("Login | Nuber Eats");
+      expect(document.title).toBe("Login | Kuber Eats");
     });
   });
   it("displays email validation errors", async () => {
     const { getByPlaceholderText, getByRole } = renderResult;
     const email = getByPlaceholderText(/email/i);
+
     await waitFor(() => {
       userEvent.type(email, "this@wont");
     });
     let errorMessage = getByRole("alert");
+
     expect(errorMessage).toHaveTextContent(/please enter a valid email/i);
     await waitFor(() => {
       userEvent.clear(email);

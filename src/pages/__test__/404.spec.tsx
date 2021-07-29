@@ -6,7 +6,7 @@ describe("<NotFound />", () => {
   it("renders OK", async () => {
     render(<NotFound />);
     await waitFor(() => {
-      expect(document.title).toBe("Not Found | Nuber Eats");
+      expect(document.title).toBe("Not Found | Kuber Eats");
     });
   });
 });
