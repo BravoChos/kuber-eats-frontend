@@ -99,7 +99,7 @@ export const Login = () => {
             <FormError errorMessage={errors.email?.message} />
           )}
           <input
-            ref={register({ required: "Password is required", minLength: 10 })}
+            ref={register({ required: "Password is required", minLength: 6 })}
             required
             name="password"
             type="password"
