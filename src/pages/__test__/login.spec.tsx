@@ -63,7 +63,7 @@ describe("<Login />", () => {
     const submitBtn = getByRole("button");
     const formData = {
       email: "real@test.com",
-      password: "123",
+      password: "1234qwer",
     };
     const mockedMutationResponse = jest.fn().mockResolvedValue({
       data: {
@@ -90,6 +90,6 @@ describe("<Login />", () => {
     });
     const errorMessage = getByRole("alert");
     expect(errorMessage).toHaveTextContent(/mutation-error/i);
-    expect(localStorage.setItem).toHaveBeenCalledWith("nuber-token", "XXX");
+    expect(localStorage.setItem).toHaveBeenCalledWith("kuber-token", "XXX");
   });
 });
