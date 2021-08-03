@@ -68,6 +68,7 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/cypress": "^8.0.0",
     "mock-apollo-client": "^1.1.0"
   }
 }
