@@ -26,4 +26,7 @@ describe("Log In", () => {
       .click();
     user.window().its("localStorage.kuber-token").should("be.a", "string");
   });
+  it("sign up", () => {
+    user.visit("/create-account");
+  });
 });
