@@ -18,7 +18,7 @@ describe("Log In", () => {
   });
   it("can fill out the form", () => {
     user.visit("/");
-    user.findByPlaceholderText(/email/i).type("dark@ko.com");
+    user.findByPlaceholderText(/email/i).type("2chos@naver.com");
     user.findByPlaceholderText(/password/i).type("1234qwer");
     user
       .findByRole("button")
