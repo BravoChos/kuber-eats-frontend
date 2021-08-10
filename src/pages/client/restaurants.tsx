@@ -67,7 +67,7 @@ export const Restaurants = () => {
   return (
     <div>
       <Helmet>
-        <title>Home | Nuber Eats</title>
+        <title>Home | Kuber Eats</title>
       </Helmet>
       <form
         onSubmit={handleSubmit(onSearchSubmit)}
