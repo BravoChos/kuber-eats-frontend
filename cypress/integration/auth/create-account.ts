@@ -37,10 +37,7 @@ describe("Create Account", () => {
     user.findByPlaceholderText(/password/i).type("1234qwer");
     user.findByRole("button").click();
     user.wait(1000);
-    user.title().should("eq", "Login | Kuber Eats");
-    user.findByPlaceholderText(/email/i).type("valid@mail.com");
-    user.findByPlaceholderText(/password/i).type("1234qwer");
-    user.findByRole("button").click();
-    user.window().its("localStorage.kuber-token").should("be.a", "string");
+    // @ts-ignore
+    user.login("valid@mail.com", "1234qwer");
   });
 });

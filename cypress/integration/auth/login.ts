@@ -17,13 +17,7 @@ describe("Log In", () => {
     user.findByRole("alert").should("have.text", "Password is required");
   });
   it("can fill out the form and log in", () => {
-    user.visit("/");
-    user.findByPlaceholderText(/email/i).type("2chos@naver.com");
-    user.findByPlaceholderText(/password/i).type("1234qwer");
-    user
-      .findByRole("button")
-      .should("not.have.class", "pointer-events-none")
-      .click();
-    user.window().its("localStorage.kuber-token").should("be.a", "string");
+    // @ts-ignore
+    user.login("valid@mail.com", "1234qwer");
   });
 });
