@@ -1,7 +1,8 @@
 import { gql, useMutation } from "@apollo/client";
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import { FormError } from "../../components/form-error";
 import { Button } from "../../components/button";
 import {
   createRestaurant,
@@ -22,27 +23,69 @@ interface IFormProps {
   name: string;
   address: string;
   categoryName: string;
+  file: FileList;
 }
 
 export const AddRestaurant = () => {
-  const [createRestaurantMutation, { loading, data }] = useMutation<
+  const onCompleted = (data: createRestaurant) => {
+    const {
+      createRestaurant: { ok, error },
+    } = data;
+    console.log("completed?");
+    if (ok) {
+      setUploading(false);
+    }
+    console.log("e", error);
+  };
+  const [createRestaurantMutation, { data }] = useMutation<
     createRestaurant,
     createRestaurantVariables
-  >(CREATE_RESTAURANT_MUTATION);
+  >(CREATE_RESTAURANT_MUTATION, {
+    onCompleted,
+  });
   const { register, getValues, formState, errors, handleSubmit } =
     useForm<IFormProps>({
       mode: "onChange",
     });
-  const onSubmit = () => {
-    console.log(getValues());
+  const [uploading, setUploading] = useState(false);
+  const onSubmit = async () => {
+    try {
+      setUploading(true);
+      const { file, name, categoryName, address } = getValues();
+      const actualFile = file[0];
+      const formBody = new FormData();
+      formBody.append("file", actualFile);
+      const { url: coverImg } = await (
+        await fetch("http://localhost:4000/uploads/", {
+          method: "POST",
+          body: formBody,
+        })
+      ).json();
+      console.log(name, categoryName, address, coverImg);
+      createRestaurantMutation({
+        variables: {
+          input: {
+            name,
+            categoryName,
+            address,
+            coverImg,
+          },
+        },
+      });
+    } catch (e) {
+      console.log("e", e);
+    }
   };
   return (
-    <div className="container">
+    <div className="container flex flex-col items-center mt-52">
       <Helmet>
         <title>Add Restaurant | Kuber Eats</title>
       </Helmet>
-      <h1>Add Restaurant</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <h4 className="font-semibold text-2xl mb-3">Add Restaurant</h4>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid max-w-screen-sm gap-3 mt-5 w-full mb-5"
+      >
         <input
           className="input"
           type="text"
@@ -64,11 +107,24 @@ export const AddRestaurant = () => {
           placeholder="Category Name"
           ref={register({ required: "Category Name is required." })}
         />
+
+        <div>
+          <input
+            type="file"
+            name="file"
+            accept="image/*"
+            ref={register({ required: true })}
+          />
+        </div>
+
         <Button
-          loading={loading}
+          loading={uploading}
           canClick={formState.isValid}
           actionText="Create Restaurant"
         />
+        {data?.createRestaurant?.error && (
+          <FormError errorMessage={data.createRestaurant.error} />
+        )}
       </form>
     </div>
   );
