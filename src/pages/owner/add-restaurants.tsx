@@ -1,13 +1,15 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { FormError } from "../../components/form-error";
 import { Button } from "../../components/button";
+import { MY_RESTAURANTS_QUERY } from "./my-restaurants";
 import {
   createRestaurant,
   createRestaurantVariables,
 } from "../../__generated__/createRestaurant";
+import { useHistory } from "react-router-dom";
 // import { CREATE_ACCOUNT_MUTATION } from "../create-account";
 
 const CREATE_RESTAURANT_MUTATION = gql`
@@ -15,6 +17,7 @@ const CREATE_RESTAURANT_MUTATION = gql`
     createRestaurant(input: $input) {
       error
       ok
+      restaurantId
     }
   }
 `;
@@ -27,15 +30,42 @@ interface IFormProps {
 }
 
 export const AddRestaurant = () => {
+  const client = useApolloClient();
+  const history = useHistory();
+  const [imageUrl, setImageUrl] = useState("");
   const onCompleted = (data: createRestaurant) => {
     const {
-      createRestaurant: { ok, error },
+      createRestaurant: { ok, restaurantId },
     } = data;
-    console.log("completed?");
     if (ok) {
+      const { name, categoryName, address } = getValues();
       setUploading(false);
+      const queryResult = client.readQuery({ query: MY_RESTAURANTS_QUERY });
+      client.writeQuery({
+        query: MY_RESTAURANTS_QUERY,
+        data: {
+          myRestaurants: {
+            ...queryResult.myRestaurants,
+            restaurants: [
+              {
+                address,
+                category: {
+                  name: categoryName,
+                  __typename: "Category",
+                },
+                coverImg: imageUrl,
+                id: restaurantId,
+                isPromoted: false,
+                name,
+                __typename: "Restaurant",
+              },
+              ...queryResult.myRestaurants.restaurants,
+            ],
+          },
+        },
+      });
+      history.push("/");
     }
-    console.log("e", error);
   };
   const [createRestaurantMutation, { data }] = useMutation<
     createRestaurant,
@@ -43,10 +73,9 @@ export const AddRestaurant = () => {
   >(CREATE_RESTAURANT_MUTATION, {
     onCompleted,
   });
-  const { register, getValues, formState, errors, handleSubmit } =
-    useForm<IFormProps>({
-      mode: "onChange",
-    });
+  const { register, getValues, formState, handleSubmit } = useForm<IFormProps>({
+    mode: "onChange",
+  });
   const [uploading, setUploading] = useState(false);
   const onSubmit = async () => {
     try {
@@ -61,7 +90,7 @@ export const AddRestaurant = () => {
           body: formBody,
         })
       ).json();
-      console.log(name, categoryName, address, coverImg);
+      setImageUrl(coverImg);
       createRestaurantMutation({
         variables: {
           input: {
