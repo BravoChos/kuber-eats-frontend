@@ -1,7 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
 import React from "react";
-import { useParams } from "react-router-dom";
-import { RESTAURANT_FRAGMENT } from "../../fragments";
+import { Link, useParams } from "react-router-dom";
+import { DISH_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
 import {
   myRestaurant,
   myRestaurantVariables,
@@ -14,10 +14,14 @@ const MY_RESTAURANT_QUERY = gql`
       error
       restaurant {
         ...RestaurantParts
+        menu {
+          ...DishParts
+        }
       }
     }
   }
   ${RESTAURANT_FRAGMENT}
+  ${DISH_FRAGMENT}
 `;
 
 interface IParams {
