@@ -59,19 +59,7 @@ export const MyRestaurant = () => {
       },
     }
   );
-  const chartData = [
-    { x: 1, y: 3000 },
-    { x: 2, y: 1500 },
-    { x: 3, y: 4250 },
-    { x: 4, y: 1250 },
-    { x: 5, y: 2300 },
-    { x: 6, y: 7150 },
-    { x: 7, y: 6830 },
-    { x: 8, y: 6830 },
-    { x: 9, y: 6830 },
-    { x: 10, y: 6830 },
-    { x: 11, y: 6830 },
-  ];
+
   return (
     <div>
       <Helmet>
@@ -104,11 +92,12 @@ export const MyRestaurant = () => {
             <h4 className="text-xl mb-5">Please upload a dish!</h4>
           ) : (
             <div className="grid mt-16 md:grid-cols-3 gap-x-5 gap-y-10">
-              {data?.myRestaurant.restaurant?.menu.map((dish) => (
+              {data?.myRestaurant.restaurant?.menu.map((dish, index) => (
                 <Dish
                   name={dish.name}
                   description={dish.description}
                   price={dish.price}
+                  key={dish.name + index + ""}
                 />
               ))}
             </div>
@@ -133,10 +122,12 @@ export const MyRestaurant = () => {
                     dy={-20}
                   />
                 }
-                data={data?.myRestaurant.restaurant?.orders.map((order) => ({
-                  x: order.createdAt,
-                  y: order.total,
-                }))}
+                data={data?.myRestaurant.restaurant?.orders.map((order) => {
+                  return {
+                    x: order.createdAt,
+                    y: order.total,
+                  };
+                })}
                 interpolation="natural"
                 style={{
                   data: {
