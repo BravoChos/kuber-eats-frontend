@@ -12,7 +12,7 @@ interface IDishProps {
   options?: restaurant_restaurant_restaurant_menu_options[] | null;
   addItemToOrder?: (dishId: number) => void;
   removeFromOrder?: (dishId: number) => void;
-  addOptionToItem?: (dishId: number, option: any) => void;
+  // addOptionToItem?: (dishId: number, option: any) => void;
 }
 
 export const Dish: React.FC<IDishProps> = ({
@@ -26,7 +26,8 @@ export const Dish: React.FC<IDishProps> = ({
   isSelected,
   addItemToOrder,
   removeFromOrder,
-  addOptionToItem,
+  // addOptionToItem,
+  children: dishOptions, // rename children => dishOptions
 }) => {
   const onClick = () => {
     if (orderStarted) {
@@ -57,7 +58,8 @@ export const Dish: React.FC<IDishProps> = ({
       {isCustomer && options && options?.length !== 0 && (
         <div>
           <h5 className="mt-8 mb-3 font-medium">Dish Options:</h5>
-          {options?.map((option, index) => (
+          {dishOptions}
+          {/* {options?.map((option, index) => (
             <span
               onClick={() =>
                 addOptionToItem
@@ -72,7 +74,7 @@ export const Dish: React.FC<IDishProps> = ({
               <h6 className="mr-2">{option.name}</h6>
               <h6 className="text-sm opacity-75">(${option.extra})</h6>
             </span>
-          ))}
+          ))} */}
         </div>
       )}
     </div>
