@@ -46,7 +46,7 @@ export const Restaurants = () => {
   >(RESTAURANTS_QUERY, {
     variables: {
       input: {
-        page: 1,
+        page,
       },
     },
   });
@@ -63,7 +63,7 @@ export const Restaurants = () => {
       search: `?term=${searchTerm}`,
     });
   };
-
+  console.log("d", data);
   return (
     <div>
       <Helmet>
