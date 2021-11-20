@@ -1,9 +1,10 @@
 import { gql, useQuery, useSubscription } from "@apollo/client";
-import { param } from "cypress/types/jquery";
+
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import { FULL_ORDER_FRAGMENT } from "../fragments";
+import { useMe } from "../hooks/useMe";
 import { getOrder, getOrderVariables } from "../__generated__/getOrder";
 import {
   orderUpdates,
@@ -38,6 +39,7 @@ interface IParams {
 
 export const Order = () => {
   const params = useParams<IParams>();
+  const { data: userData } = useMe();
   const { data, subscribeToMore } = useQuery<getOrder, getOrderVariables>(
     GET_ORDER,
     {
@@ -48,8 +50,12 @@ export const Order = () => {
       },
     }
   );
+
+  console.log(params, data);
+
   useEffect(() => {
     if (data?.getOrder.ok) {
+      console.log(data);
       subscribeToMore({
         document: ORDER_SUBSCRIPTION,
         variables: {
@@ -79,7 +85,7 @@ export const Order = () => {
   return (
     <div className="mt-32 container flex justify-center">
       <Helmet>
-        <title>Order #{params.id} | Nuber Eats</title>
+        <title>Order #{params.id} | Kuber Eats</title>
       </Helmet>
       <div className="border border-gray-800 w-full max-w-screen-sm flex flex-col justify-center">
         <h4 className="bg-gray-800 w-full py-5 text-white text-center text-xl">
@@ -107,9 +113,21 @@ export const Order = () => {
               {data?.getOrder.order?.driver?.email || "Not yet."}
             </span>
           </div>
-          <span className=" text-center mt-5 mb-3  text-2xl text-lime-600">
-            Status: {data?.getOrder.order?.status}
-          </span>
+          {userData?.me.role === "Client" && (
+            <span className=" text-center mt-5 mb-3  text-2xl text-lime-600">
+              Status: {data?.getOrder.order?.status}
+            </span>
+          )}
+          {userData?.me.role === "Owner" && (
+            <>
+              {data?.getOrder.order?.status === "Pending" && (
+                <button className="btn">Accept Order</button>
+              )}
+              {data?.getOrder.order?.status === "Cooking" && (
+                <button className="btn">Order Cooked</button>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>
