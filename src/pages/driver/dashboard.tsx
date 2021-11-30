@@ -96,7 +96,7 @@ export const Dashboard = () => {
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={onApiLoaded}
           defaultZoom={16}
-          draggable={false}
+          draggable={true}
           defaultCenter={{
             lat: 36.58,
             lng: 125.95,
