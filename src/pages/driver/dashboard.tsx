@@ -77,9 +77,11 @@ export const Dashboard = () => {
               driverCoords.lng + 0.05
             ),
           },
-          travelMode: google.maps.TravelMode.DRIVING,
+          // travelMode: google.maps.TravelMode.DRIVING,
+          travelMode: google.maps.TravelMode.TRANSIT,
         },
         (result) => {
+          console.log(result);
           directionsRenderer.setDirections(result);
         }
       );
@@ -103,7 +105,7 @@ export const Dashboard = () => {
           }}
           bootstrapURLKeys={{ key: "AIzaSyBAAHGJkPweUpPkqNYdLCSkRickcThthlk" }} // not secured
         >
-          <Driver lat={driverCoords.lat} lng={driverCoords.lng} />
+          {/* <Driver lat={driverCoords.lat} lng={driverCoords.lng} /> */}
         </GoogleMapReact>
       </div>
       <button onClick={onGetRouteClick}>Get route</button>
